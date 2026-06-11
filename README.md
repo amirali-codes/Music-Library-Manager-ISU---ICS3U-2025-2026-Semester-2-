@@ -2,7 +2,7 @@
 
 # OVERVIEW
 
-For my ISU, I built a Music Library Manager that lets a user keep track of their songs, artists, and ratings. I designed it to be interactive, so everything runs through a main menu where the user just types a number to choose what they want to do. I also made sure it has some built-in data so it isn't emplty when you start it up.
+For my ISU, I built a Music Library Manager that lets a user keep track of their songs, artists, and ratings. I designed it to be interactive, so everything runs through a main menu where the user just types a number to choose what they want to do. I also made sure it has some built-in data so it isn't empty when you start it up.
 
 # My Variables and Data Structures
 
