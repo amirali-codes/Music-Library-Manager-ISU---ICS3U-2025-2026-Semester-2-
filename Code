@@ -1,0 +1,299 @@
+import java.util.*;
+
+// NAME: Amirali Zhian
+// PROJECT: MLM (Music Library Manager) - ICS3U ISU
+
+public class Main {
+    public static void main(String[] args) {
+        // In this part, I make a Scanner named sc to get user input
+        Scanner sc = new Scanner(System.in);
+
+        // In this part, I make ArrayLists to hold the song titles, artists, and ratings
+        ArrayList<String> titles = new ArrayList<>();
+        ArrayList<String> artists = new ArrayList<>();
+        ArrayList<Integer> ratings = new ArrayList<>();
+        // In this part, I add 5 default songs to the library to start with
+        titles.add("Til Further Notice"); artists.add("Travis Scott"); ratings.add(95);
+        titles.add("Dust"); artists.add("Drake"); ratings.add(82);
+        titles.add("Future Swag"); artists.add("Young Thug"); ratings.add(70);
+        titles.add("Humble"); artists.add("Kendrick Lamar"); ratings.add(55);
+        titles.add("Stay"); artists.add("Justin Bieber"); ratings.add(30);
+        boolean running = true;
+        // In this part, I print the welcome message for the user
+        System.out.println("Welcome to the Music Library Manager (MLM)!");
+        System.out.println("Developed for ICS3U Individual Summative Task.");
+        while (running) {
+            // In this part, I show the main menu options
+            System.out.println("\n---------- MAIN MENU ----------");
+            System.out.println("1. Add a song");
+            System.out.println("2. Average rating of the library");
+            System.out.println("3. Minimum and Maximum rated song");
+            System.out.println("4. Display the list of songs");
+            System.out.println("5. Display the Rating Distribution (Vertical)");
+            System.out.println("6. Search a song");
+            System.out.println("7. Display the top and bottom 20%");
+            System.out.println("8. Exit the program");
+            System.out.print("Choose an option: ");
+            // In this part, I get the user's menu choice as a string
+            String menuChoice = sc.nextLine();
+            if (menuChoice.equals("1")) {
+                // In this part, I let the user add up to 2 new songs
+                int songsAddedThisRound = 0;
+                boolean adding = true;
+                while (adding && songsAddedThisRound < 2) {
+                    System.out.print("Enter song title: ");
+                    String t = sc.nextLine();
+                    System.out.print("Enter artist: ");
+                    String a = sc.nextLine();
+                    int r = -1;
+                    // In this part, I loop until the user enters a rating between 0 and 100
+                    while (r < 0 || r > 100) {
+                        System.out.print("Enter rating (0-100): ");
+                        r = Integer.parseInt(sc.nextLine());
+                        if (r < 0 || r > 100) {
+                            System.out.println("Please keep it between 0 and 100.");
+                        }
+                    }
+                    titles.add(t);
+                    artists.add(a);
+                    ratings.add(r);
+                    songsAddedThisRound++;
+                    if (songsAddedThisRound < 2) {
+                        System.out.print("Would you like to add another song? (yes/no): ");
+                        String response = sc.nextLine().toLowerCase();
+                        if (!response.equals("yes")) {
+                            adding = false;
+                        }
+                    } else {
+                        System.out.println("Max of 2 songs added for this round. Going back to menu.");
+                    }
+                }
+            } else if (menuChoice.equals("2")) {
+                // In this part, I find the average rating of all the songs
+                if (ratings.size() == 0) {
+                    System.out.println("Library is empty.");
+                } else {
+                    double sum = 0;
+                    for (int r : ratings) {
+                        sum += r;
+                    }
+                    System.out.printf("Average Library Rating: %.2f\n", (sum / ratings.size()));
+                }
+            } else if (menuChoice.equals("3")) {
+                // In this part, I look for the highest and lowest rated songs
+                if (ratings.size() == 0) {
+                    System.out.println("No songs to evaluate.");
+                } else {
+                    int maxIdx = 0;
+                    int minIdx = 0;
+                    for (int i = 1; i < ratings.size(); i++) {
+                        if (ratings.get(i) > ratings.get(maxIdx)) {
+                            maxIdx = i;
+                        }
+                        if (ratings.get(i) < ratings.get(minIdx)) {
+                            minIdx = i;
+                        }
+                    }
+                    System.out.println("Highest Rated: " + titles.get(maxIdx) + " by " + artists.get(maxIdx) + " (" + ratings.get(maxIdx) + ")");
+                    System.out.println("Lowest Rated: " + titles.get(minIdx) + " by " + artists.get(minIdx) + " (" + ratings.get(minIdx) + ")");
+                }
+            } else if (menuChoice.equals("4")) {
+                // In this part, I show the song list and open a sub-menu to edit or remove a song
+                boolean inSubMenu = true;
+                while (inSubMenu) {
+                    System.out.println("\nID\tTitle\t\tArtist\t\tRating");
+                    for (int i = 0; i < titles.size(); i++) {
+                        System.out.println(i + "\t" + titles.get(i) + "\t\t" + artists.get(i) + "\t\t" + ratings.get(i));
+                    }
+                    System.out.println("\nSub-Menu Options:");
+                    System.out.println("1. Edit a Song");
+                    System.out.println("2. Remove a Song");
+                    System.out.println("3. Back to Main Menu");
+                    System.out.print("> ");
+                    String subChoice = sc.nextLine();
+                    if (subChoice.equals("1")) {
+                        System.out.print("Enter ID to edit: ");
+                        int id = Integer.parseInt(sc.nextLine());
+                        // In this part, I check if the entered ID actually exists in the list
+                        if (id >= 0 && id < titles.size()) {
+                            System.out.print("New Title: ");
+                            String newTitle = sc.nextLine();
+                            System.out.print("New Artist: ");
+                            String newArtist = sc.nextLine();
+                            int newRating = -1;
+                            // In this part, I make sure the new rating is also between 0 and 100
+                            while (newRating < 0 || newRating > 100) {
+                                System.out.print("New Rating (0-100): ");
+                                newRating = Integer.parseInt(sc.nextLine());
+                                if (newRating < 0 || newRating > 100) {
+                                    System.out.println("Please keep it between 0 and 100.");
+                                }
+                            }
+                            titles.set(id, newTitle);
+                            artists.set(id, newArtist);
+                            ratings.set(id, newRating);
+                            System.out.println("Song updated successfully.");
+                        } else {
+                            System.out.println("Invalid ID range.");
+                        }
+                    } else if (subChoice.equals("2")) {
+                        System.out.print("Enter ID to remove: ");
+                        int id = Integer.parseInt(sc.nextLine());
+
+                        // In this part, I delete the song from all three lists using its ID
+                        if (id >= 0 && id < titles.size()) {
+                            titles.remove(id);
+                            artists.remove(id);
+                            ratings.remove(id);
+                            System.out.println("Song removed.");
+                        } else {
+                            System.out.println("Invalid ID range.");
+                        }
+                    } else {
+                        inSubMenu = false;
+                    }
+                }
+            } else if (menuChoice.equals("5")) {
+                // In this part, I count how many songs fall into each star rating category
+                if (ratings.size() == 0) {
+                    System.out.println("Library is empty. No distribution to display.");
+                } else {
+                    int c5 = 0, c4 = 0, c3 = 0, c2 = 0, c1 = 0;
+                    for (int r : ratings) {
+                        if (r >= 90) c5++;
+                        else if (r >= 75) {
+                            c4++;
+                        }
+                        else if (r >= 60) {
+                            c3++;
+                        }
+                        else if (r >= 40) {
+                            c2++;
+                        }
+                        else{
+                            c1++;
+                        }
+                    }
+                    // In this part, I find the largest count to know how tall the chart should be
+                    int maxHeight = c5;
+                    if (c4 > maxHeight) {
+                        maxHeight = c4;
+                    }
+                    if (c3 > maxHeight) {
+                        maxHeight = c3;
+                    }
+                    if (c2 > maxHeight) {
+                        maxHeight = c2;
+                    }
+                    if (c1 > maxHeight) {
+                        maxHeight = c1;
+                    }
+                    System.out.println("\nRating Distribution:");
+                    // In this part, I print the vertical chart row by row from top to bottom
+                    for (int i = maxHeight; i > 0; i--) {
+                        String row = "";
+                        if (c5 >= i) {
+                            row += "#   ";
+                        } else {
+                            row += "    ";
+                        }
+                        if (c4 >= i) {
+                            row += "#   ";
+                        } else {
+                            row += "    ";
+                        }
+                        if (c3 >= i) {
+                            row += "#   ";
+                        } else {
+                            row += "    ";
+                        }
+                        if (c2 >= i) {
+                            row += "#   ";
+                        } else {
+                            row += "    ";
+                        }
+                        if (c1 >= i) {
+                            row += "#   ";
+                        } else {
+                            row += "    ";
+                        }
+                        System.out.println(row);
+                    }
+                    System.out.println("____________________");
+                    System.out.println("5*  4*  3*  2*  1*");
+                }
+            } else if (menuChoice.equals("6")) {
+                // In this part, I search for a song and check if its rating is above, below, or equal to the average
+                if (ratings.size() == 0) {
+                    System.out.println("Library is empty. Nothing to search.");
+                } else {
+                    System.out.print("Search for title or artist: ");
+                    String query = sc.nextLine().toLowerCase();
+                    double sum = 0;
+                    for (int r : ratings) {
+                        sum += r;
+                    }
+                    double avg = sum / ratings.size();
+                    boolean found = false;
+                    for (int i = 0; i < titles.size(); i++) {
+                        if (titles.get(i).toLowerCase().contains(query) || artists.get(i).toLowerCase().contains(query)) {
+                            String relation = "";
+                            if (ratings.get(i) > avg) {
+                                relation = "above";
+                            } else if (ratings.get(i) == avg) {
+                                relation = "equal to";
+                            } else {
+                                relation = "below";
+                            }
+                            System.out.println("Found: " + titles.get(i) + " | Artist: " + artists.get(i) + " | Rating: " + ratings.get(i));
+                            System.out.println("This is " + relation + " the library average of " + String.format("%.2f", avg));
+                            found = true;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("No matching songs.");
+                    }
+                }
+            } else if (menuChoice.equals("7")) {
+                // In this part, I show the top and bottom 20% of songs
+                if (ratings.size() < 1) {
+                    System.out.println("Not enough songs.");
+                } else {
+                    int count = (int) Math.ceil(ratings.size() * 0.2);
+                    // In this part, I copy the lists so we don't mess up the original order
+                    ArrayList<Integer> tempRatings = new ArrayList<>(ratings);
+                    ArrayList<String> tempTitles = new ArrayList<>(titles);
+                    // In this part, I sort the copies from highest to lowest rating
+                    for (int i = 0; i < tempRatings.size(); i++) {
+                        for (int j = 0; j < tempRatings.size() - 1; j++) {
+                            if (tempRatings.get(j) < tempRatings.get(j+1)) {
+                                int r = tempRatings.get(j);
+                                tempRatings.set(j, tempRatings.get(j+1));
+                                tempRatings.set(j+1, r);
+                                String t = tempTitles.get(j);
+                                tempTitles.set(j, tempTitles.get(j+1));
+                                tempTitles.set(j+1, t);
+                            }
+                        }
+                    }
+                    System.out.println("\nTop 20% of Songs:");
+                    for (int i = 0; i < count; i++) {
+                        System.out.println(tempTitles.get(i) + " (" + tempRatings.get(i) + ")");
+                    }
+                    System.out.println("\nBottom 20% of Songs:");
+                    for (int i = 0; i < count; i++) {
+                        int idx = tempRatings.size() - 1 - i;
+                        System.out.println(tempTitles.get(idx) + " (" + tempRatings.get(idx) + ")");
+                    }
+                }
+            } else if (menuChoice.equals("8")) {
+                // In this part, I stop the loop to close the program
+                System.out.println("Thank you for using the MLM!");
+                running = false;
+            } else {
+                System.out.println("Invalid choice. Try again.");
+            }
+        }
+        sc.close();
+    }
+}
